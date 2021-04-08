@@ -1,48 +1,111 @@
 import { Component, OnInit } from '@angular/core';
 
+import { TimelineMax, gsap } from 'gsap'
+import { RoughEase } from "gsap/EasePack";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
-  title = 'Brood';
+
+  public text = ""
 
   ngOnInit() {
     this.noise()
+    this.scanline()
+    this.initOvertitle()
+
+    setTimeout(() => {
+      this.startIntroTextSeries()
+    }, 1000);
   }
 
-  private scanlines() {
-    var title = document.getElementById('main-title').cloneNode(true)
-    document.querySelector('.titleCont').appendChild(title)
-    title.classList.add("overTitle")
-    var line = document.createElement('div')
-    line.className = 'line'
-    document.getElementById('main-content').appendChild(line)
+  public text_seq1 = [
+    `Your stomach hurts.<br>
+    You still feel the phantom pain of your lost tail.`,
 
-    var tl = new TimelineMax({ repeat: -1 });
+    "You weren't full a single night since the others ate your last friends and relatives.",
+    "They will not be caring for you anymore.",
 
-    for (var i = 50; i--;) {
-      tl.to(title, R(0.03, 0.17), { opacity: R(0, 1), y: R(-1.5, 1.5), x: R(-1.5, 1.5) })
-    };
+    "Your starvation turns to anger.",
+    "But in your condition you cannot take revenge on anyone.",
+    "Not the others.",
+    "Not the big, mean cat.",
 
-    tl.to(line, tl.duration() / 2, { opacity: R(0.1, 1), x: R(-window.innerWidth / 2, window.innerWidth / 2), ease: RoughEase.ease.config({ strength: 0.5, points: 10, randomize: true, taper: "none" }), repeat: 1 }, 0);
+    "There will be blood.",
+  ]
 
-    var dot;
-    for (var i = 0; i < 10; i++) {
-      dot = document.createElement('div');
-      dot.className = 'dot';
-      document.getElementById('main-content').prepend(dot);
-      setDotPosition(dot);
-      tl.to(dot, 0.1, { opacity: 0, repeat: 1, yoyo: true, onComplete: setDotPosition, onCompleteParams: [dot], ease: RoughEase.ease.config({ strength: 0.5, points: 10, randomize: true, taper: "none" }) }, 0);
+  private async startIntroTextSeries() {
+    for (let t of this.text_seq1) {
+      await this.setText(t)
     }
   }
 
-  setDotPosition(dot) {
-    TweenMax.set(dot, { x: R(-window.innerWidth / 2, window.innerWidth / 2), y: R(-window.innerHeight, window.innerHeight), delay: R(0, 1) });
+  private setText(text: string) {
+    return new Promise((resolve, reject) => {
+
+      let cCount = text.length
+
+      // set text
+      this.text = text
+
+      // fade in
+      gsap.to("#text", {
+        duration: 6,
+        opacity: 1,
+        ease: "power3.out"
+      }).then(() => {
+
+        // stay
+        setTimeout(() => {
+
+          // fade out
+          gsap.to("#text", {
+            duration: 1,
+            opacity: 0,
+          }).then(() => {
+            resolve("");
+          })
+
+        }, cCount / 2)
+
+      })
+    })
   }
 
-  R(max, min) { return Math.random() * (max - min) + min };
+  private initOvertitle() {
+
+    let text = document.getElementById('over')
+
+    let tl = new TimelineMax({ repeat: -1 });
+
+    function R(max, min) { return Math.random() * (max - min) + min };
+
+    for (var i = 50; i--;) {
+      tl.to(text, R(0.03, 0.17), { opacity: R(0, 1), y: R(-1.5, 1.5), x: R(-1.5, 1.5) })
+    };
+  }
+
+  private scanline() {
+    let scanline = document.getElementById('scanline')
+    let tl = new TimelineMax({ repeat: -1 });
+
+    tl.to(
+      scanline,
+      2,
+      {
+        opacity: R(0.1, 1),
+        x: R(-window.innerWidth / 2, window.innerWidth / 2),
+        ease: RoughEase.ease.config({ strength: 0.5, points: 10, randomize: true, taper: "none" }),
+        repeat: 1
+      },
+      0
+    )
+
+    function R(max, min) { return Math.random() * (max - min) + min };
+  }
 
   private noise() {
     let canvas, ctx;
@@ -80,7 +143,6 @@ export class AppComponent implements OnInit {
       ctx.putImageData(noiseData[frame], 0, 0);
     };
 
-
     // Loop
     const loop = () => {
       paintNoise()
@@ -89,7 +151,6 @@ export class AppComponent implements OnInit {
         window.requestAnimationFrame(loop);
       }, (1000 / 25));
     };
-
 
     // Setup
     const setup = () => {
@@ -106,7 +167,6 @@ export class AppComponent implements OnInit {
       loop();
     };
 
-
     // Reset
     let resizeThrottle;
     const reset = () => {
@@ -119,7 +179,6 @@ export class AppComponent implements OnInit {
         }, 200);
       }, false);
     };
-
 
     // Init
     const init = (() => {

@@ -1,3 +1,15 @@
-<app-intro></app-intro>
+<div class="main-content" id="main-content">
 
-<div class="noise"></div>
+  <!-- text -->
+  <div id="text" style="position: relative;">
+    <!-- main text -->
+    <div [innerHTML]="text"></div>
+    <!-- over text (shake effect) -->
+    <div id="over" [innerHTML]="text"></div>
+  </div>
+
+  <canvas id="noise" class="noise"></canvas>
+  <div class="vignette"></div>
+  <div id="scanline"></div>
+
+</div>
