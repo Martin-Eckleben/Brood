@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { TimelineMax } from 'gsap'
-
 @Injectable({
   providedIn: 'root'
 })

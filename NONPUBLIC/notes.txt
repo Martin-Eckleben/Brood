@@ -1,0 +1,15 @@
+ich will nicht bei cultist simulator abschauen aber das gefühl von mystery und darkness und spannung ist was ich will
+
+card game with time moving but you have the ability to freeze time that you discover
+
+eerie feeling wie bei shin sekai yori
+squealer
+mole rats
+
+<!-- text -->
+<div id="text" style="position: relative;">
+  <!-- main text -->
+  <div [innerHTML]="text"></div>
+  <!-- over text (shake effect) -->
+  <div id="over" [innerHTML]="text"></div>
+</div>

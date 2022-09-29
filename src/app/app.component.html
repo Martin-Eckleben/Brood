@@ -1,14 +1,8 @@
 <div class="main-content" id="main-content">
 
-  <!-- text -->
-  <div id="text" style="position: relative;">
-    <!-- main text -->
-    <div [innerHTML]="text"></div>
-    <!-- over text (shake effect) -->
-    <div id="over" [innerHTML]="text"></div>
-  </div>
 
-  <canvas id="noise" class="noise"></canvas>
+
+  <canvas id="noise" class="noise" #noise></canvas>
   <div class="vignette"></div>
   <div id="scanline"></div>
 
